@@ -1,5 +1,5 @@
 {
-  "name": "voice-ai-patient-registration",
+  "name": "ai-voice-agent-for-hospital",
   "version": "1.0.0",
   "description": "Voice AI agent for patient registration: Twilio telephony + LLM conversation + SQLite persistence + REST API",
   "main": "server.js",

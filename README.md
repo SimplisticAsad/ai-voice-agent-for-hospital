@@ -1,4 +1,4 @@
-# Voice AI Patient Registration System
+# AI Voice Agent for Hospital — Patient Registration System
 
 A voice AI agent that answers a real phone number, conversationally collects U.S. patient
 demographic information, persists it to a database, and exposes it through a REST API and a
