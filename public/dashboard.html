@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Patient Registration Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; padding: 2rem; background: #0f1220; color: #eef0f8; }
+  h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
+  p.sub { color: #9aa1c4; margin-top: 0; }
+  .filters { display: flex; gap: 0.5rem; margin: 1rem 0; flex-wrap: wrap; }
+  .filters input { padding: 0.5rem; border-radius: 6px; border: 1px solid #33395c; background: #1a1e33; color: #fff; }
+  button { padding: 0.5rem 1rem; border-radius: 6px; border: none; background: #5865f2; color: white; cursor: pointer; }
+  table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  th, td { text-align: left; padding: 0.6rem; border-bottom: 1px solid #2a2f4c; font-size: 0.9rem; }
+  th { color: #9aa1c4; font-weight: 600; }
+  .empty { color: #9aa1c4; padding: 2rem; text-align: center; }
+  .badge { background: #2a2f4c; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; }
+</style>
+</head>
+<body>
+  <h1>Patient Registration Dashboard</h1>
+  <p class="sub">Records collected via the voice AI intake agent and the REST API.</p>
+
+  <div class="filters">
+    <input id="lastName" placeholder="Filter by last name" />
+    <input id="phone" placeholder="Filter by phone number" />
+    <button onclick="load()">Search</button>
+    <button onclick="reset()">Reset</button>
+  </div>
+
+  <table id="table">
+    <thead>
+      <tr>
+        <th>Name</th><th>DOB</th><th>Sex</th><th>Phone</th><th>City/State</th><th>Insurance</th><th>Created</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div id="empty" class="empty" style="display:none;">No patients found.</div>
+
+<script>
+async function load() {
+  const lastName = document.getElementById('lastName').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const params = new URLSearchParams();
+  if (lastName) params.set('last_name', lastName);
+  if (phone) params.set('phone_number', phone);
+
+  const res = await fetch('/patients?' + params.toString());
+  const json = await res.json();
+  const rows = document.getElementById('rows');
+  const empty = document.getElementById('empty');
+  rows.innerHTML = '';
+
+  if (!json.data || json.data.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  for (const p of json.data) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${p.first_name} ${p.last_name}</td>
+      <td>${p.date_of_birth}</td>
+      <td><span class="badge">${p.sex}</span></td>
+      <td>${p.phone_number}</td>
+      <td>${p.city}, ${p.state}</td>
+      <td>${p.insurance_provider || '—'}</td>
+      <td>${new Date(p.created_at).toLocaleString()}</td>
+    `;
+    rows.appendChild(tr);
+  }
+}
+
+function reset() {
+  document.getElementById('lastName').value = '';
+  document.getElementById('phone').value = '';
+  load();
+}
+
+load();
+</script>
+</body>
+</html>

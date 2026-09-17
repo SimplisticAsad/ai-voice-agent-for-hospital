@@ -1,0 +1,8 @@
+node_modules/
+.env
+patients.db
+patients.db-journal
+patients.db-wal
+patients.db-shm
+*.log
+tts_out/
