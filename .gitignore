@@ -1,8 +1,10 @@
-node_modules/
+__pycache__/
+*.pyc
+venv/
+.venv/
 .env
 patients.db
 patients.db-journal
 patients.db-wal
 patients.db-shm
 *.log
-tts_out/

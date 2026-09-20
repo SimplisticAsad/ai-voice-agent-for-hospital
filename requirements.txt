@@ -1,0 +1,7 @@
+flask>=3.0.0
+flask-cors>=4.0.0
+twilio>=9.0.0
+smolagents>=1.21.0
+huggingface_hub>=0.34.0
+python-dotenv>=1.0.0
+gunicorn>=22.0.0
